@@ -1,0 +1,15 @@
+{
+  "name": "בריאות בנחת - תזונה מותאמת אישית ושבת שלום",
+  "short_name": "בריאות בנחת",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#059669",
+  "background_color": "#f8fafc",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

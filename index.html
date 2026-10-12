@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#059669">
+  <title>בריאות בנחת | תזונה לפי סוג דם, קלוריות והתאמה לשבת</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="app-container">
+    
+    <!-- Top Header -->
+    <header class="main-header">
+      <div class="header-brand">
+        <div class="logo-circle">
+          <img src="favicon.svg" alt="לוגו" class="logo-icon">
+        </div>
+        <div>
+          <h1 class="brand-title">בריאות בנחת</h1>
+          <p class="brand-subtitle">איזון קלורי • סוג דם • עונג שבת מעצים</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="streak-badge" id="streakBadge" title="רצף ימים מתועדים">
+          <span class="streak-fire">🌿</span>
+          <span id="streakDays">3</span> ימי איזון
+        </div>
+        <button class="icon-btn" id="openProfileBtn" title="הגדרות פרופיל">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Daily Uplift Banner -->
+    <section class="quote-strip" id="dailyQuoteStrip">
+      <div class="quote-content">
+        <span class="quote-icon">✨</span>
+        <span class="quote-text" id="quoteBannerText">"הגוף הוא כלי לנשמה; כשמזינים אותו בנחת ובכבוד, הכל מתבהר."</span>
+      </div>
+      <button class="quote-refresh-btn" id="newQuoteBtn" title="משפט מעודד נוסף">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19"/></svg>
+      </button>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="tracker">
+        <span class="tab-icon">📊</span>
+        <span>יומן קלוריות</span>
+      </button>
+      <button class="tab-btn" data-tab="bloodType">
+        <span class="tab-icon">🩸</span>
+        <span>סוג דם</span>
+      </button>
+      <button class="tab-btn" data-tab="shabbat">
+        <span class="tab-icon">🕯️</span>
+        <span>עונג שבת</span>
+      </button>
+      <button class="tab-btn" data-tab="inspiration">
+        <span class="tab-icon">💖</span>
+        <span>חיזוק ועידוד</span>
+      </button>
+    </nav>
+
+    <!-- Main Content Views -->
+    <main class="content-area">
+
+      <!-- TAB 1: CALORIE & DAILY TRACKER -->
+      <section id="tab-tracker" class="tab-pane active">
+        <!-- Day Selector & Quick Status -->
+        <div class="date-bar">
+          <button class="date-arrow" id="prevDayBtn">&#8594;</button>
+          <div class="current-date-info">
+            <span id="displayDateLabel" class="date-label">היום, יום שלישי</span>
+            <span id="shabbatNoticeTag" class="shabbat-tag-pill hidden">מצב חיסכון לשבת פעיל ✨</span>
+          </div>
+          <button class="date-arrow" id="nextDayBtn">&#8592;</button>
+        </div>
+
+        <!-- Calorie Ring Summary Card -->
+        <div class="calorie-summary-card">
+          <div class="calorie-metrics">
+            <div class="metric-block">
+              <span class="metric-val" id="consumedKcal">0</span>
+              <span class="metric-label">נאכל היום</span>
+            </div>
+            
+            <div class="ring-container">
+              <svg class="progress-ring" width="130" height="130">
+                <circle class="ring-bg" cx="65" cy="65" r="54" stroke-width="10"/>
+                <circle id="calorieProgressRing" class="ring-fill" cx="65" cy="65" r="54" stroke-width="10" stroke-dasharray="339.29" stroke-dashoffset="339.29"/>
+              </svg>
+              <div class="ring-text">
+                <span id="remainingKcal" class="ring-large">1,650</span>
+                <span class="ring-sub">נותרו קלוריות</span>
+              </div>
+            </div>
+
+            <div class="metric-block">
+              <span class="metric-val" id="targetKcal">1,650</span>
+              <span class="metric-label" id="targetModeLabel">יעד יומי</span>
+            </div>
+          </div>
+
+          <!-- Shabbat Bank Info Banner in Tracker -->
+          <div class="shabbat-tracker-sync" id="shabbatBankQuickView">
+            <div class="bank-pill-content">
+              <span class="bank-icon">🍞</span>
+              <div>
+                <strong>בנק קלוריות לשבת:</strong> נצברו <span id="bankAccumulatedKcal">300</span> קלוריות נוספות לסעודות השבת!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Log Meals Section -->
+        <div class="meals-container">
+          <div class="section-title-row">
+            <h2>ארוחות היום</h2>
+            <button class="btn btn-primary btn-sm" id="openAddFoodModalBtn">
+              <span>+</span> הוסף מאכל
+            </button>
+          </div>
+
+          <!-- Breakfast -->
+          <div class="meal-group" data-meal="breakfast">
+            <div class="meal-group-header">
+              <div class="meal-header-title">
+                <span class="meal-icon">🍳</span>
+                <h3>ארוחת בוקר</h3>
+              </div>
+              <span class="meal-kcal-badge" id="breakfastKcal">0 קל'</span>
+            </div>
+            <div class="meal-items-list" id="breakfastList">
+              <div class="empty-meal-hint">עדיין לא נרשם מאכל לבוקר</div>
+            </div>
+          </div>
+
+          <!-- Lunch -->
+          <div class="meal-group" data-meal="lunch">
+            <div class="meal-group-header">
+              <div class="meal-header-title">
+                <span class="meal-icon">🥗</span>
+                <h3>ארוחת צהריים</h3>
+              </div>
+              <span class="meal-kcal-badge" id="lunchKcal">0 קל'</span>
+            </div>
+            <div class="meal-items-list" id="lunchList">
+              <div class="empty-meal-hint">עדיין לא נרשם מאכל לצהריים</div>
+            </div>
+          </div>
+
+          <!-- Dinner -->
+          <div class="meal-group" data-meal="dinner">
+            <div class="meal-group-header">
+              <div class="meal-header-title">
+                <span class="meal-icon">🍲</span>
+                <h3>ארוחת ערב</h3>
+              </div>
+              <span class="meal-kcal-badge" id="dinnerKcal">0 קל'</span>
+            </div>
+            <div class="meal-items-list" id="dinnerList">
+              <div class="empty-meal-hint">עדיין לא נרשם מאכל לערב</div>
+            </div>
+          </div>
+
+          <!-- Snacks -->
+          <div class="meal-group" data-meal="snacks">
+            <div class="meal-group-header">
+              <div class="meal-header-title">
+                <span class="meal-icon">🍎</span>
+                <h3>נשנושי ביניים / מים</h3>
+              </div>
+              <span class="meal-kcal-badge" id="snacksKcal">0 קל'</span>
+            </div>
+            <div class="meal-items-list" id="snacksList">
+              <div class="empty-meal-hint">עדיין לא נרשמו נשנושים</div>
+            </div>
+          </div>
+
+          <!-- Water tracker bar -->
+          <div class="water-box card">
+            <div class="water-header">
+              <span>💧 שתיית מים יומית: <strong id="waterCount">0</strong> / 8 כוסות</span>
+              <button class="btn btn-secondary btn-xs" id="resetWaterBtn">איפוס</button>
+            </div>
+            <div class="water-cups" id="waterCupsContainer">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: BLOOD TYPE DIET GUIDE -->
+      <section id="tab-bloodType" class="tab-pane">
+        <div class="card intro-card">
+          <div class="blood-selector-bar">
+            <div>
+              <h3>התאמת מאכלים לפי סוג דם</h3>
+              <p class="text-muted">בחירת מזונות שמייעלים את חילוף החומרים ומפחיתים דלקתיות לפי שיטת ד"ר ד'אדאמו</p>
+            </div>
+            <div class="blood-type-chips">
+              <button class="type-chip" data-type="O">סוג O</button>
+              <button class="type-chip active" data-type="A">סוג A</button>
+              <button class="type-chip" data-type="B">סוג B</button>
+              <button class="type-chip" data-type="AB">סוג AB</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blood Type Profile Summary -->
+        <div class="card profile-type-card" id="typeProfileCard">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Search & Filter in Food Database -->
+        <div class="card food-search-card">
+          <div class="search-box">
+            <input type="text" id="foodSearchInput" placeholder="חפש מאכל... (למשל: סלמון, עוף, קינואה, עגבניות)">
+            <span class="search-icon">🔍</span>
+          </div>
+
+          <div class="category-pills" id="bloodCatPills">
+            <button class="cat-pill active" data-cat="all">הכל</button>
+            <button class="cat-pill" data-cat="beneficial">🌟 מועיל ומומלץ</button>
+            <button class="cat-pill" data-cat="neutral">⚪ ניטרלי</button>
+            <button class="cat-pill" data-cat="avoid">⛔ מומלץ להימנע</button>
+          </div>
+
+          <div class="food-results-list" id="bloodFoodList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: SHABBAT COMPATIBILITY & HARMONY -->
+      <section id="tab-shabbat" class="tab-pane">
+        <div class="shabbat-hero card">
+          <div class="shabbat-hero-badge">שלום בית וגוף בריא</div>
+          <h2>עונג שבת בלי ייסורי מצפון</h2>
+          <p>
+            שבת ניתנה לעונג, סעודה ושמחה. כדי שלא נרגיש תסכול או כבדות, האפליקציה מחשבת עבורך 
+            <strong>בנק קלוריות שבועי</strong>: חסכון קל של 150-250 קלוריות בימי החול, המעניק לך תוספת מכובדת של כ-1,000 קלוריות לשבת!
+          </p>
+          
+          <div class="shabbat-toggle-wrapper">
+            <label class="switch-control">
+              <input type="checkbox" id="shabbatModeToggle" checked>
+              <span class="switch-slider"></span>
+            </label>
+            <span class="switch-label">הפעל מנגנון "בנק קלוריות לשבת" (ויסות אוטומטי בימי החול)</span>
+          </div>
+        </div>
+
+        <!-- Shabbat Bank Calculator Widget -->
+        <div class="card shabbat-bank-card">
+          <div class="shabbat-bank-header">
+            <h3>מאזן השבת שלך השבוע</h3>
+            <span class="shabbat-bank-total" id="shabbatBudgetTotal">+1,200 קל' תוספת</span>
+          </div>
+          <div class="shabbat-distribution">
+            <div class="dist-col">
+              <span class="dist-icon">🍷</span>
+              <span class="dist-title">ליל שבת</span>
+              <span class="dist-kcal" id="distFriday">+500 קל'</span>
+              <small>חלה, מנה ראשונה, בשר/דג</small>
+            </div>
+            <div class="dist-col">
+              <span class="dist-icon">☀️</span>
+              <span class="dist-title">סעודת יום (חמין)</span>
+              <span class="dist-kcal" id="distSaturday">+500 קל'</span>
+              <small>קידוש רבא, חמין מאוזן</small>
+            </div>
+            <div class="dist-col">
+              <span class="dist-icon">✨</span>
+              <span class="dist-title">סעודה שלישית</span>
+              <span class="dist-kcal" id="distSeuda3">+200 קל'</span>
+              <small>קלילה, דגים, ירקות</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shabbat Practical Wisdom & Strategies -->
+        <div class="card shabbat-tips-card">
+          <h3>עצות קודש ורוגע לשולחן שבת</h3>
+          <div class="tips-grid">
+            <div class="tip-card">
+              <div class="tip-icon">🍞</div>
+              <h4>מצוות חלה בנחת</h4>
+              <p>במוציא טועמים כזית (כ-27 גרם, פרוסה יפה אחת) לשם המצווה. בהמשך הסעודה אפשר להתמקד בתבשילים המזינים והסלטים המבושלים.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-icon">🍲</div>
+              <h4>חמין קליל ומרווה</h4>
+              <p>העשירו את הטשולנט בירקות שורש, קטניות מותאמות לסוג הדם שלכם ונתחי בקר רזים או עוף. הפחיתו שמן ומלח מרוכז כדי לקום רעננים.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-icon">🍇</div>
+              <h4>קידוש וסלטים</h4>
+              <p>כוס הקידוש מכילה לרוב סוכר. העדיפו יין יבש או מיץ ענבים טבעי קל. היזהרו מסלטי מיונז תעשייתיים – העדיפו מטבוחה ביתית וטחינה.</p>
+            </div>
+            <div class="tip-card">
+              <div class="tip-icon">🧘‍♂️</div>
+              <h4>אכילה לשם שמיים</h4>
+              <p>לפני כל ביס – נשימה אחת עמוקה. השבת היא זמן מנוחה, אין צורך למהר ולמלא את הצלחת מחדש. השובע מגיע כעבור 20 דקות.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Challah & Festive Food Quick Estimator -->
+        <div class="card challah-calc-card">
+          <h3>מחשבון שבת מהיר (מאכלים מסורתיים)</h3>
+          <p class="text-muted">רוצים לדעת בדיוק כמה "עולה" המנה בשבת? לחצו והוסיפו ליומן:</p>
+          <div class="shabbat-foods-grid" id="shabbatQuickFoods">
+            <!-- JS populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: ENCOURAGEMENT & INSPIRATION -->
+      <section id="tab-inspiration" class="tab-pane">
+        <!-- Daily Card Generator -->
+        <div class="card oracle-card">
+          <div class="oracle-header">
+            <span class="oracle-sparkle">💎</span>
+            <h2>קלף חיזוק ועוצמה פנימית</h2>
+            <p>לחצו לקבלת משפט מעצים מותאם אישית למסע התזונתי שלכם</p>
+          </div>
+          <div class="oracle-inner-box" id="oracleCardBox">
+            <div class="oracle-text" id="oracleQuote">
+              "אין הברכה שורה על הלחץ אלא על השלווה. כל בחירה בריאה שאתה עושה היום היא מתנה שאתה מעניק לעצמך."
+            </div>
+            <div class="oracle-source" id="oracleSource">~ השראה של בריאות הנפש והגוף</div>
+          </div>
+          <button class="btn btn-primary btn-block" id="drawCardBtn">משוך קלף חיזוק חדש ✨</button>
+        </div>
+
+        <!-- Emotional Eating SOS Helper -->
+        <div class="card sos-card">
+          <div class="sos-header">
+            <span class="sos-icon">🤍</span>
+            <div>
+              <h3>רגע של חשק עז או מתח? (עזרה מיידית)</h3>
+              <p>עוצרים דקה לפני שפותחים את המקרר ללא שליטה</p>
+            </div>
+          </div>
+          <div class="sos-steps">
+            <div class="sos-step">
+              <span class="step-num">1</span>
+              <div>
+                <strong>שתו כוס מים קרים</strong>
+                <p>המוח מבלבל פעמים רבות בין צמא לרעב רגשי.</p>
+              </div>
+            </div>
+            <div class="sos-step">
+              <span class="step-num">2</span>
+              <div>
+                <strong>3 נשימות עמוקות של 4 שניות</strong>
+                <p>שאיפה 4 שניות, עצירה 4 שניות, נשיפה רגועה 6 שניות. הדופק יורד והדחף נחלש.</p>
+              </div>
+            </div>
+            <div class="sos-step">
+              <span class="step-num">3</span>
+              <div>
+                <strong>שיחה פנימית חומלת</strong>
+                <p>אמרו לעצמכם: "אני אדם בעל בחירה. המאכל לא יברח, ואני ראוי להרגיש קליל ושמח בגופי."</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Uplifting Quotes Library -->
+        <div class="card">
+          <h3>אוצר חיזוקים ואמרות חז"ל לבריאות</h3>
+          <div class="quote-feed" id="inspirationFeed">
+            <!-- JS populated -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Modal: Add Food to Daily Tracker -->
+    <div class="modal-backdrop" id="addFoodModal">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>הוספת מאכל לארוחה</h3>
+          <button class="modal-close-btn" id="closeAddFoodModalBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>לאיזו ארוחה?</label>
+            <select id="modalMealSelect" class="form-input">
+              <option value="breakfast">ארוחת בוקר 🍳</option>
+              <option value="lunch">ארוחת צהריים 🥗</option>
+              <option value="dinner">ארוחת ערב 🍲</option>
+              <option value="snacks">נשנוש / ביניים 🍎</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>חיפוש מהיר ממאגר המזונות (כולל התאמת סוג דם):</label>
+            <div class="search-box">
+              <input type="text" id="modalFoodSearch" placeholder="הקלד שם מאכל...">
+            </div>
+            <div class="modal-suggestions" id="modalFoodSuggestions">
+              <!-- Rendered items -->
+            </div>
+          </div>
+
+          <div class="divider">או הזנה ידנית:</div>
+
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label>שם המאכל</label>
+              <input type="text" id="customFoodName" class="form-input" placeholder="לדוגמה: יוגורט עזים עם אגוזים">
+            </div>
+            <div class="form-group flex-1">
+              <label>קלוריות</label>
+              <input type="number" id="customFoodKcal" class="form-input" placeholder="180">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>התאמה לסוג הדם שלך</label>
+              <select id="customFoodBloodComp" class="form-input">
+                <option value="beneficial">🌟 מועיל מאוד</option>
+                <option value="neutral" selected>⚪ ניטרלי</option>
+                <option value="avoid">⛔ להימנע</option>
+              </select>
+            </div>
+            <div class="form-group flex-1">
+              <label>כמות / יחידות</label>
+              <input type="text" id="customFoodPortion" class="form-input" placeholder="מנה אחת">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="cancelAddFoodBtn">ביטול</button>
+          <button class="btn btn-primary" id="confirmAddFoodBtn">הוסף ליומן</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Profile & Target Settings -->
+    <div class="modal-backdrop" id="profileModal">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>הגדרות פרופיל ותוכנית</h3>
+          <button class="modal-close-btn" id="closeProfileModalBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>סוג דם עיקרי</label>
+              <select id="profBloodType" class="form-input">
+                <option value="A">סוג דם A (צמחוני / חקלאי)</option>
+                <option value="B">סוג דם B (גמיש / נוודי)</option>
+                <option value="AB">סוג דם AB (הנדיר / מעורב)</option>
+                <option value="O">סוג דם O (הצייד / עתיר חלבון)</option>
+              </select>
+            </div>
+            <div class="form-group flex-1">
+              <label>מטרה</label>
+              <select id="profGoal" class="form-input">
+                <option value="loss">ירידה מתונה ובטוחה</option>
+                <option value="maintain">שמירה על הקיים ורוגע</option>
+                <option value="health">איזון בריאותי ועוצמה</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>משקל נוכחי (ק"ג)</label>
+              <input type="number" id="profWeight" class="form-input" value="75">
+            </div>
+            <div class="form-group flex-1">
+              <label>יעד קלוריות בסיסי יומי</label>
+              <input type="number" id="profBaseKcal" class="form-input" value="1800">
+            </div>
+          </div>
+
+          <div class="shabbat-setting-box">
+            <label class="checkbox-container">
+              <input type="checkbox" id="profShabbatDeduction" checked>
+              <span class="checkmark"></span>
+              <span class="checkbox-title">התאמת שבת: הפחת 200 קלוריות מימי החול למען עונג שבת</span>
+            </label>
+            <p class="setting-hint">בימים א'-ה' היעד יהיה מופחת ב-200 קלוריות (לא פחות מ-1,350), ובשישי-שבת תקבלו תוספת של כ-1,000 קלוריות לסעודות!</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btn-block" id="saveProfileBtn">שמור הגדרות</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification for Encouragement -->
+    <div id="toastNotification" class="toast hidden">
+      <span class="toast-icon">✨</span>
+      <span class="toast-message" id="toastMessage">מעולה! הבחירה הבריאה מחזקת אותך!</span>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
